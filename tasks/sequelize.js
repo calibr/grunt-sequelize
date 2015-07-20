@@ -15,19 +15,19 @@ var createMigrateTask = require('../lib/migrate_task');
 
 module.exports = function (grunt) {
 
-  function options() {
-    // node_modules/grunt-sequelize/tasks
+  function options(db_name) {
     var dbPath = path.normalize(path.join(__dirname, '../../../db'));
-    var env = process.env.NODE_ENV || 'development';
 
     var taskOpts = _.defaults(grunt.config.get('sequelize.options'), {
       config: path.join(dbPath, 'config.json'),
       migrationsPath: path.join(dbPath, 'migrations')
     });
 
-    var dbConfig = grunt.file.readJSON(taskOpts.config)[env];
+    var config = require(path.normalize(path.join(__dirname, '../../..', taskOpts.projectConfig)));
+
+    var dbConfig = config.db[db_name];
     if (!dbConfig) {
-      var err = new Error('No configuration for NODE_ENV="' + env + '" found in the ' + taskOpts.config);
+      var err = new Error('No database configuration "' + db_name + '" found in the ' + taskOpts.config);
       grunt.log.error(err);
       throw err;
     }
@@ -37,8 +37,19 @@ module.exports = function (grunt) {
     return _.extend(taskOpts, dbConfig);
   }
 
-  grunt.registerTask('sequelize:migrate', function (arg) {
-    var task = createMigrateTask(options());
+  grunt.registerTask('sequelize:migrate', function (db_name, arg, name) {
+    if (arg == "create") {
+      if (!name) name = (new Date).getTime();
+      var opts = options(db_name);
+      var dst = path.join(opts.migrationsPath, utils.ts() + '-' + db_name + '-' + name + '.js');
+      grunt.file.mkdir(path.dirname(dst));
+      grunt.file.copy(path.normalize(path.join(__dirname, '../assets', 'migration.tpl')), dst);
+      grunt.log.writeln('Migration created: ' + path.basename(dst));
+
+      return;
+    }
+
+    var task = createMigrateTask(options(db_name));
     var done = this.async();
 
     arg = arg || 'up';
@@ -68,16 +79,7 @@ module.exports = function (grunt) {
         grunt.log.writeln('Done!');
       })
 
-      .complete(done);
-  });
-
-  // TODO: maybe we should leave this kind of functionality to scaffold generators (ex. yeoman)?
-  grunt.registerTask('sequelize:migration:create', function (name) {
-    var opts = options();
-    var dst = path.join(opts.migrations, utils.ts() + '-' + name + '.js');
-    grunt.file.mkdir(path.dirname(dst));
-    grunt.file.copy(path.normalize(path.join(__dirname, '../lib/assets', 'migration.js')), dst);
-    grunt.log.writeln('Migration created: ' + path.basename(dst));
+      .finally(done);
   });
 
 };

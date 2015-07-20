@@ -45,14 +45,14 @@
     "shared-examples-for": "^0.1.3",
     "sqlite3": "^3.0.8",
     "timekeeper": "0.0.5",
-    "tmp": "0.0.26",
-    "umzug": "^1.6.0"
+    "tmp": "0.0.26"
   },
   "keywords": [
     "gruntplugin"
   ],
   "dependencies": {
     "lodash": "^3.9.2",
-    "moment": "^2.10.3"
+    "moment": "^2.10.3",
+    "umzug": "^1.6.0"
   }
 }
