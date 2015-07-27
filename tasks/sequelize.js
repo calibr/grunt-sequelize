@@ -12,6 +12,7 @@ var path = require('path');
 var _ = require('lodash');
 var utils = require('../lib/util');
 var createMigrateTask = require('../lib/migrate_task');
+var async = require('async');
 
 module.exports = function (grunt) {
 
@@ -41,20 +42,8 @@ module.exports = function (grunt) {
     return _.extend(taskOpts, dbConfig);
   }
 
-  grunt.registerTask('sequelize:migrate', function (db_name, arg, name) {
-    if (arg == "create") {
-      if (!name) name = (new Date).getTime();
-      var opts = options(db_name);
-      var dst = path.join(opts.migrationsPath, utils.ts() + '-' + db_name + '-' + name + '.js');
-      grunt.file.mkdir(path.dirname(dst));
-      grunt.file.copy(path.normalize(path.join(__dirname, '../assets', 'migration.tpl')), dst);
-      grunt.log.writeln('Migration created: ' + path.basename(dst));
-
-      return;
-    }
-
+  function run_task(db_name, arg, cb) {
     var task = createMigrateTask(options(db_name));
-    var done = this.async();
 
     arg = arg || 'up';
 
@@ -83,7 +72,31 @@ module.exports = function (grunt) {
         grunt.log.writeln('Done!');
       })
 
-      .finally(done);
+
+      .finally(cb);
+  }
+
+  grunt.registerTask('sequelize:migrate', function (db_name, arg, name) {
+    if (arg == "create") {
+      if (!name) name = (new Date).getTime();
+      var opts = options(db_name);
+      var dst = path.join(opts.migrationsPath, utils.ts() + '-' + db_name + '-' + name + '.js');
+      grunt.file.mkdir(path.dirname(dst));
+      grunt.file.copy(path.normalize(path.join(__dirname, '../assets', 'migration.tpl')), dst);
+      grunt.log.writeln('Migration created: ' + path.basename(dst));
+
+      return;
+    }
+    var done = this.async();
+    if (!db_name) {
+      var databases = grunt.config.get('sequelize.options.packages');
+      var tasks = [];
+      async.forEachOfSeries(databases, function (db_rep, db_name, cb) {
+        run_task(db_name, arg, cb);
+      }, done);
+    } else {
+      run_task(db_name, arg, done);
+    }
   });
 
 };

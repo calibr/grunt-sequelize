@@ -1,7 +1,7 @@
 {
   "name": "grunt-sequelize",
   "description": "Sequelize migrations from Grunt",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "homepage": "https://github.com/bencevans/grunt-sequelize",
   "author": {
     "name": "Ben Evans",
@@ -53,6 +53,7 @@
   "dependencies": {
     "lodash": "^3.9.2",
     "moment": "^2.10.3",
-    "umzug": "^1.6.0"
+    "umzug": "^1.6.0",
+    "async": "~1.4.0"
   }
 }
