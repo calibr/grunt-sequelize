@@ -1,8 +1,8 @@
 {
-  "name": "grunt-sequelize",
+  "name": "@nimbus/grunt-sequelize",
   "description": "Sequelize migrations from Grunt",
-  "version": "4.0.1",
-  "homepage": "https://github.com/bencevans/grunt-sequelize",
+  "version": "4.1.0",
+  "homepage": "https://github.com/rusmaxim/grunt-sequelize",
   "author": {
     "name": "Ben Evans",
     "email": "ben@bensbit.co.uk",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bencevans/grunt-sequelize.git"
+    "url": "https://github.com/rusmaxim/grunt-sequelize.git"
   },
   "bugs": {
-    "url": "https://github.com/bencevans/grunt-sequelize/issues"
+    "url": "https://github.com/rusmaxim/grunt-sequelize/issues"
   },
   "licenses": [
     {
