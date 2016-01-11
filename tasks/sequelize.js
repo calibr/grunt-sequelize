@@ -17,7 +17,7 @@ var async = require('async');
 module.exports = function (grunt) {
 
   function options(db_name) {
-    var dbPath = path.normalize(path.join(__dirname, '../../../db'));
+    var dbPath = path.normalize(path.join(__dirname, '../../../../db'));
 
     var taskOpts = _.defaults(grunt.config.get('sequelize.options'), {
       config: path.join(dbPath, 'config.json'),
@@ -28,7 +28,7 @@ module.exports = function (grunt) {
       taskOpts.migrationsPath = path.join('node_modules', taskOpts.packages[db_name], 'migrations');
     }
 
-    var config = require(path.normalize(path.join(__dirname, '../../..', taskOpts.projectConfig)));
+    var config = require(path.normalize(path.join(__dirname, '../../../..', taskOpts.projectConfig)));
 
     var dbConfig = config.db[db_name];
     if (!dbConfig) {

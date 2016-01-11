@@ -1,7 +1,7 @@
 {
   "name": "@nimbus/grunt-sequelize",
   "description": "Sequelize migrations from Grunt",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "homepage": "https://github.com/rusmaxim/grunt-sequelize",
   "author": {
     "name": "Ben Evans",
