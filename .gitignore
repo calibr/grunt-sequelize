@@ -3,3 +3,5 @@ node_modules
 logs
 coverage
 .idea
+*.sublime-project
+*.sublime-workspace

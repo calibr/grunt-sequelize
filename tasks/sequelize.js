@@ -71,7 +71,10 @@ module.exports = function (grunt) {
       .then(function () {
         grunt.log.writeln('Done!');
       })
-
+      .catch(err => {
+        console.error('Fail to migrate', err.message, err.stack)
+        throw err
+      })
 
       .finally(cb);
   }
