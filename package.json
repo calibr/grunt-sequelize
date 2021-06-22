@@ -55,5 +55,8 @@
     "moment": "^2.10.3",
     "umzug": "^1.6.0",
     "async": "~1.4.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.nimbusweb.co"
   }
 }
